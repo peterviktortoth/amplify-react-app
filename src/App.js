@@ -1,9 +1,73 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 function App() {
   const [radius, setRadius] = useState('');
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
+
+  const getRentalPrices = async (radius) => {
+    try {
+      // Get current location coordinates
+      const coordinates = await getCurrentLocation();
+
+      if (coordinates) {
+        const [latitude, longitude] = coordinates;
+        console.log(`Current Location: Latitude ${latitude}, Longitude ${longitude}`);
+
+        // Use the obtained coordinates in the RentCast API request
+        const url = `https://api.rentcast.io/v1/listings/rental/long-term?latitude=${latitude}&longitude=${longitude}&radius=${radius}&status=Active&limit=500`;
+
+        const headers = {
+          "accept": "application/json",
+          // Include your RentCast API key here
+          "X-Api-Key": "5fe60f24d1c04d22a89cc5e1583a119f",
+        };
+
+        const response = await fetch(url, { headers });
+        const data = await response.json();
+
+        // Extract rental prices and bedroom counts from the properties
+        const rentalPrices = {};
+        data.forEach(property => {
+          const bedrooms = property.bedrooms || "Unknown";
+          const price = property.price || 0;
+
+          if (!rentalPrices[bedrooms]) {
+            rentalPrices[bedrooms] = [price];
+          } else {
+            rentalPrices[bedrooms].push(price);
+          }
+        });
+
+        // Display average rental prices for each bedroom count
+        const averagePrices = Object.entries(rentalPrices).map(([bedrooms, prices]) => {
+          const averagePrice = prices.reduce((sum, price) => sum + price, 0) / prices.length;
+          return { bedrooms, average_price: averagePrice };
+        });
+
+        setResults(averagePrices);
+
+      } else {
+        console.log("Unable to retrieve current location.");
+        setError("Unable to retrieve current location.");
+      }
+
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      setError(error.message);
+    }
+  };
+
+  const getCurrentLocation = async () => {
+    try {
+      const response = await fetch('https://ipinfo.io');
+      const data = await response.json();
+      return data.loc.split(',');
+    } catch (error) {
+      console.error(`Error getting location: ${error}`);
+      return null;
+    }
+  };
 
   const calculateRentalPrices = () => {
     // Validate input
@@ -15,36 +79,14 @@ function App() {
       setError(''); // Clear error message
     }
 
-    // Make an AJAX request to your Python script
-    fetch(`http://localhost:5004/get_rental_prices?radius=${radius}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error fetching data. Please try again later.');
-        }
-        return response.json();
-      })
-      .then((responseData) => {
-        // Replace "Unknown" with "Studio"
-        responseData.forEach((item) => {
-          if (item.bedrooms === 'Unknown') {
-            item.bedrooms = 'Studio';
-          }
-        });
-
-        // Sort the results: Studio first, then by bedroom count
-        responseData.sort((a, b) => {
-          if (a.bedrooms === 'Studio') return -1;
-          if (b.bedrooms === 'Studio') return 1;
-          return parseInt(a.bedrooms) - parseInt(b.bedrooms);
-        });
-
-        setResults(responseData);
-      })
-      .catch((error) => {
-        setResults([]); // Clear previous results
-        setError(error.message);
-      });
+    // Call the JavaScript function equivalent to the Python logic
+    getRentalPrices(parseFloat(radius));
   };
+
+  useEffect(() => {
+    // Call the API when the component mounts
+    calculateRentalPrices();
+  }, []); // Empty dependency array ensures the effect runs once on mount
 
   return (
     <div>
