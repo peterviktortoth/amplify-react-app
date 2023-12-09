@@ -1,23 +1,28 @@
+// App.js
+
 import React, { useState, useEffect } from 'react';
+import './styles.css'; // Import your CSS file
 
 function App() {
   const [radius, setRadius] = useState('');
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
 
   const getCurrentLocation = async (apiKey) => {
     try {
       const position = await getCurrentPosition();
-      
+
       if (position) {
         const { latitude, longitude } = position.coords;
 
         const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?key=${apiKey}&q=${latitude}+${longitude}`);
-        
+
         if (!response.ok) {
           throw new Error(`Failed to fetch: ${response.status} ${response.statusText}`);
         }
-        
+
         const data = await response.json();
 
         if (data.results && data.results.length > 0) {
@@ -34,7 +39,7 @@ function App() {
       return null;
     }
   };
-  
+
   const getCurrentPosition = () => {
     return new Promise((resolve, reject) => {
       navigator.geolocation.getCurrentPosition(
@@ -45,6 +50,8 @@ function App() {
   };
 
   const getRentalPrices = async (radius) => {
+    setLoading(true);
+
     try {
       const coordinates = await getCurrentLocation("7cc33eaee3bf43c480474df135a0b6b8");
 
@@ -89,6 +96,8 @@ function App() {
     } catch (error) {
       console.error(`Error: ${error}`);
       setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -109,10 +118,12 @@ function App() {
   }, []);
 
   return (
-    <div>
-      <h1>Rentals Near Me</h1>
-      <form>
-        <label htmlFor="radius">Enter Radius (in miles): </label>
+    <div className="container">
+      <h1 className="title">Can I Afford to Live Here?</h1>
+      <form className="form">
+        <label htmlFor="radius" className="form-label">
+          Enter Radius (in miles):
+        </label>
         <input
           type="number"
           id="radius"
@@ -122,21 +133,30 @@ function App() {
           placeholder="e.g., 1.5"
           value={radius}
           onChange={(e) => setRadius(e.target.value)}
+          className="form-input"
         />
-        <button type="button" onClick={calculateRentalPrices}>
+        <button type="button" onClick={calculateRentalPrices} className="form-button">
           Calculate
         </button>
       </form>
-      {error && <div id="error" style={{ color: 'red', marginTop: '10px' }}>{error}</div>}
-      <div id="results">
-        <ul>
-          {results.map((item) => (
-            <li key={item.bedrooms}>
-              {item.bedrooms === "Unknown" ? "Studio" : item.bedrooms}: ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {loading ? (
+        <div className="loading-message">Fetching prices...</div>
+      ) : (
+        <div>
+          {error && <div className="error-message">{error}</div>}
+          <ul className="results-list">
+  {results.map((item) => (
+    <li key={item.bedrooms} className="result-item">
+      Average {item.bedrooms === 'Unknown' ? (
+        <span className="studio-label">Studio</span>
+      ) : (
+        `${item.bedrooms} bedroom`
+      )} rental price - ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+    </li>
+  ))}
+</ul>
+        </div>
+      )}
     </div>
   );
 }
