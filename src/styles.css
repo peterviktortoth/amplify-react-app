@@ -1,9 +1,9 @@
 /* styles.css */
 
 .container {
-    max-width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
     padding: 20px;
-    box-sizing: border-box;
   }
   
   .title {
@@ -16,19 +16,19 @@
     text-align: center;
   }
   
-  .form label {
+  .form-label {
     display: block;
     margin-bottom: 10px;
   }
   
-  .form input {
+  .form-input {
     padding: 10px;
     margin-bottom: 10px;
     width: 100%;
     box-sizing: border-box;
   }
   
-  .form button {
+  .form-button {
     padding: 12px;
     background-color: #4caf50;
     color: white;
@@ -63,4 +63,29 @@
   .studio-label {
     color: #2196f3;
   }
+
+  /* styles.css */
+
+/* ... (existing styles) ... */
+
+.radius-control {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .control-button {
+    padding: 8px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .radius-value {
+    margin: 0 10px;
+    font-weight: bold;
+    font-size: 1.2em;
+  }
+  
   

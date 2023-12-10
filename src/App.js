@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import './styles.css'; // Import your CSS file
 
 function App() {
-  const [radius, setRadius] = useState('');
+  const [radius, setRadius] = useState('0.1');
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -109,13 +109,12 @@ function App() {
     } else {
       setError('');
     }
-
+  
+    // Call getRentalPrices only when the button is clicked
     getRentalPrices(parseFloat(radius));
   };
+  
 
-  useEffect(() => {
-    calculateRentalPrices();
-  }, []);
 
   return (
     <div className="container">
