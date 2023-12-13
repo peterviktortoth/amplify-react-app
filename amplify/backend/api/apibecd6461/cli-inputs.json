@@ -1,7 +1,7 @@
 {
   "endpoints": [
     {
-      "path": "/average-apartment-prices",
+      "path": "/calculateRentalPrices",
       "method": "GET",
       "function": "calculateRentalPrices.handler"
     }
