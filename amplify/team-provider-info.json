@@ -22,5 +22,32 @@
         "apibecd6461": {}
       }
     }
+  },
+  "test": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplifyreactapp-test-214144-authRole",
+      "UnauthRoleArn": "arn:aws:iam::829598437531:role/amplify-amplifyreactapp-test-214144-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::829598437531:role/amplify-amplifyreactapp-test-214144-authRole",
+      "Region": "us-east-2",
+      "DeploymentBucketName": "amplify-amplifyreactapp-test-214144-deployment",
+      "UnauthRoleName": "amplify-amplifyreactapp-test-214144-unauthRole",
+      "StackName": "amplify-amplifyreactapp-test-214144",
+      "StackId": "arn:aws:cloudformation:us-east-2:829598437531:stack/amplify-amplifyreactapp-test-214144/28068f20-9961-11ee-9d5c-02e4cff93a1b",
+      "AmplifyAppId": "dicf9zovxnzgw"
+    },
+    "categories": {
+      "function": {
+        "amplifyreactapp4ef3013a": {
+          "deploymentBucketName": "amplify-amplifyreactapp-test-214144-deployment",
+          "s3Key": "amplify-builds/amplifyreactapp4ef3013a-364d426d2f6f7a2b5156-build.zip"
+        }
+      },
+      "api": {
+        "apibecd6461": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
+      }
+    }
   }
 }

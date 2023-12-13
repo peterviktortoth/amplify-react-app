@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/user/user-location": {
+      "name": "/user/user-location",
+      "lambdaFunction": "amplifyreactapp4ef3013a",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
