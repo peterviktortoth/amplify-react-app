@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './styles.css';
 
-const API_ENDPOINT = 'YOUR_API_ENDPOINT'; // Replace with your actual API Gateway endpoint
+const API_ENDPOINT = 'https://3eippeo4ce.execute-api.us-east-2.amazonaws.com/staging'; // Replace with your actual API Gateway endpoint
 
 function App() {
   const [radius, setRadius] = useState('0.1');

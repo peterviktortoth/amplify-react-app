@@ -13,7 +13,13 @@
     },
     "categories": {
       "function": {
-        "amplifyreactapp4ef3013a": {}
+        "amplifyreactapp4ef3013a": {
+          "deploymentBucketName": "amplify-amplify919604aafbae4-staging-194040-deployment",
+          "s3Key": "amplify-builds/amplifyreactapp4ef3013a-364d426d2f6f7a2b5156-build.zip"
+        }
+      },
+      "api": {
+        "apibecd6461": {}
       }
     }
   }
