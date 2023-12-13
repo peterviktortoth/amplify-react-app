@@ -69,7 +69,7 @@ const invokeGetLocationLambda = async () => {
   const lambda = new AWS.Lambda();
   
   const params = {
-    FunctionName: 'Your-GetCurrentLocation-Lambda-FunctionName', // Replace with the actual Lambda function name
+    FunctionName: 'get-current-location', // Replace with the actual Lambda function name
     InvocationType: 'RequestResponse',
   };
 

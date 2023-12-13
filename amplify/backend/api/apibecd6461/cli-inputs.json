@@ -1,19 +1,14 @@
 {
-  "version": 1,
-  "paths": {
-    "/user/{userDetails}": {
-      "name": "/user/{userDetails}",
-      "lambdaFunction": "amplifyreactapp4ef3013a",
-      "permissions": {
-        "setting": "open"
-      }
+  "endpoints": [
+    {
+      "path": "/user-location",
+      "method": "GET",
+      "function": "getCurrentLocation.handler"
     },
-    "/user/user-location": {
-      "name": "/user/user-location",
-      "lambdaFunction": "amplifyreactapp4ef3013a",
-      "permissions": {
-        "setting": "open"
-      }
+    {
+      "path": "/average-apartment-prices",
+      "method": "GET",
+      "function": "calculateRentalPrices.handler"
     }
-  }
+  ]
 }
