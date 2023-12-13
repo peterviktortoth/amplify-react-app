@@ -1,11 +1,6 @@
 {
   "endpoints": [
     {
-      "path": "/user-location",
-      "method": "GET",
-      "function": "getCurrentLocation.handler"
-    },
-    {
       "path": "/average-apartment-prices",
       "method": "GET",
       "function": "calculateRentalPrices.handler"
