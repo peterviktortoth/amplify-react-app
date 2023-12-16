@@ -3,7 +3,8 @@
     {
       "path": "/calculateRentalPrices",
       "method": "GET",
-      "function": "calculateRentalPrices.handler"
+      "function": "calculateRentalPrices.handler",
+        "version": 1
     }
   ]
 }

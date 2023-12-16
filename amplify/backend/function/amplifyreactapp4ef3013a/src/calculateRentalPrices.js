@@ -3,24 +3,27 @@ const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
   try {
-    // Invoke the getCurrentLocation Lambda function to get the user's location
-    const locationResponse = await invokeGetLocationLambda();
-    
-    if (locationResponse.statusCode === 200) {
-      const { latitude, longitude } = JSON.parse(locationResponse.body);
-      console.log(`Current Location: Latitude ${latitude}, Longitude ${longitude}`);
+    // Extract coordinates and radius from the request
+    const { latitude, longitude } = JSON.parse(event.body).coordinates;
+    const radius = event.queryStringParameters.radius || 1; // Default radius
 
-      const radius = event.queryStringParameters.radius || 1; // Default radius
+    if (!latitude || !longitude) {
+      throw new Error("Coordinates not provided or invalid.");
+    }
 
-      const url = `https://api.rentcast.io/v1/listings/rental/long-term?latitude=${latitude}&longitude=${longitude}&radius=${radius}&status=Active&limit=500`;
+    console.log(`Current Location: Latitude ${latitude}, Longitude ${longitude}`);
 
-      const headers = {
-        "accept": "application/json",
-        "X-Api-Key": "5fe60f24d1c04d22a89cc5e1583a119f",
-      };
+    const url = `https://api.rentcast.io/v1/listings/rental/long-term?latitude=${latitude}&longitude=${longitude}&radius=${radius}&status=Active&limit=500`;
+    const headers = {
+      "accept": "application/json",
+      "X-Api-Key": "5fe60f24d1c04d22a89cc5e1583a119f", // Consider moving to a secure location
+    };
 
-      const response = await fetch(url, { headers });
-      const data = await response.json();
+    const response = await fetch(url, { headers });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    }
+    const data = await response.json();
 
       const rentalPrices = {};
       data.forEach(property => {
@@ -43,35 +46,17 @@ exports.handler = async (event) => {
         statusCode: 200,
         headers: {
           "Access-Control-Allow-Origin": "*", // Enable CORS for all domains
-          "Access-Control-Allow-Headers": "*", // Allow any headers
         },
         body: JSON.stringify(averagePrices),
       };
-    } else {
-      console.log("Unable to retrieve current location.");
-      throw new Error("Unable to retrieve current location.");
+    } catch (error) {
+      console.error(`Error: ${error}`);
+      return {
+        statusCode: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ error: error.message }),
+      };
     }
-  } catch (error) {
-    console.error(`Error: ${error}`);
-    return {
-      statusCode: 500,
-      headers: {
-        "Access-Control-Allow-Origin": "*", // Enable CORS for all domains
-        "Access-Control-Allow-Headers": "*", // Allow any headers
-      },
-      body: JSON.stringify({ error: 'Internal Server Error' }),
-    };
-  }
-};
-
-// Function to invoke the getCurrentLocation Lambda function
-const invokeGetLocationLambda = async () => {
-  const lambda = new AWS.Lambda();
-  
-  const params = {
-    FunctionName: 'get-current-location', // Replace with the actual Lambda function name
-    InvocationType: 'RequestResponse',
   };
-
-  return await lambda.invoke(params).promise();
-};
