@@ -2,10 +2,9 @@ const AWS = require('aws-sdk');
 const fetch = require('node-fetch');
 
 exports.handler = async (event) => {
-  try {
-    // Extract coordinates and radius from the request
-    const { latitude, longitude } = JSON.parse(event.body).coordinates;
-    const radius = event.queryStringParameters.radius || 1; // Default radius
+  const latitude = event.queryStringParameters.latitude;
+  const longitude = event.queryStringParameters.longitude;
+  const radius = event.queryStringParameters.radius || '0.1'; // Default radius
 
     if (!latitude || !longitude) {
       throw new Error("Coordinates not provided or invalid.");
@@ -49,14 +48,4 @@ exports.handler = async (event) => {
         },
         body: JSON.stringify(averagePrices),
       };
-    } catch (error) {
-      console.error(`Error: ${error}`);
-      return {
-        statusCode: 500,
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-        },
-        body: JSON.stringify({ error: error.message }),
-      };
-    }
   };

@@ -33,13 +33,13 @@ function App() {
         longitude: position.coords.longitude,
       };
 
-      const response = await fetch(`${API_ENDPOINT}/getRentalPrices?radius=${radius}`, {
-        method: 'POST',
-        body: JSON.stringify({ coordinates }),
+      const response = await fetch(`${API_ENDPOINT}/rentalPrices?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=${radius}`, {
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      
 
       if (!response.ok) {
         throw new Error(`Failed to fetch rental prices: ${response.statusText}`);
