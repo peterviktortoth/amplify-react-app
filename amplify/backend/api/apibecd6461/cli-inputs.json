@@ -1,10 +1,19 @@
 {
-  "endpoints": [
-    {
-      "path": "/calculateRentalPrices",
-      "method": "GET",
-      "function": "calculateRentalPrices.handler",
-        "version": 1
+  "version": 1,
+  "paths": {
+    "/user/{userDetails}": {
+      "name": "/user/{userDetails}",
+      "lambdaFunction": "amplifyreactapp4ef3013a",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/user/user-location": {
+      "name": "/user/user-location",
+      "lambdaFunction": "amplifyreactapp4ef3013a",
+      "permissions": {
+        "setting": "open"
+      }
     }
-  ]
+  }
 }
