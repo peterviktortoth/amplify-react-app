@@ -2,7 +2,7 @@
   "version": 1,
   "paths": {
     "/rentalPrices": {
-      "name": "/rentalPrices",
+      "name": "/amplifyreactapp4ef3013a",
       "lambdaFunction": "amplifyreactapp4ef3013a",
       "permissions": {
         "setting": "open"
