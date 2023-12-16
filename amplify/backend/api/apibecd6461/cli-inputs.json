@@ -1,15 +1,8 @@
 {
   "version": 1,
   "paths": {
-    "/user/{userDetails}": {
-      "name": "/user/{userDetails}",
-      "lambdaFunction": "amplifyreactapp4ef3013a",
-      "permissions": {
-        "setting": "open"
-      }
-    },
-    "/user/user-location": {
-      "name": "/user/user-location",
+    "/rentalPrices": {
+      "name": "/rentalPrices",
       "lambdaFunction": "amplifyreactapp4ef3013a",
       "permissions": {
         "setting": "open"
