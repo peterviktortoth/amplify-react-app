@@ -39,7 +39,7 @@
       "function": {
         "amplifyreactapp4ef3013a": {
           "deploymentBucketName": "amplify-amplifyreactapp-test-214144-deployment",
-          "s3Key": "amplify-builds/amplifyreactapp4ef3013a-7148384b37434863436c-build.zip"
+          "s3Key": "amplify-builds/amplifyreactapp4ef3013a-74422b6946412b6e7a42-build.zip"
         }
       },
       "api": {
