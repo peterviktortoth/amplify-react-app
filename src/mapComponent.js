@@ -21,7 +21,7 @@ const MapComponent = ({ coordinates, radius }) => {
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [coordinates.longitude, coordinates.latitude],
-        zoom: 14.5,
+        zoom: 15.2,
         scrollZoom: false,
         doubleClickZoom: false,
         touchZoomRotate: false,
@@ -33,43 +33,50 @@ const MapComponent = ({ coordinates, radius }) => {
         .setLngLat([coordinates.longitude, coordinates.latitude])
         .addTo(map.current);
 
-      map.current.on('load', () => {
-        map.current.addLayer({
-          id: 'circle-radius',
-          type: 'circle',
-          source: {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              geometry: {
-                type: 'Point',
-                coordinates: [coordinates.longitude, coordinates.latitude]
+      // Add or update the circle layer when the style is fully loaded
+      map.current.on('styledata', () => {
+        if (map.current.getLayer('circle-radius')) {
+          map.current.setPaintProperty('circle-radius', 'circle-radius', getRadiusInMeters(radius));
+        } else {
+          map.current.addLayer({
+            id: 'circle-radius',
+            type: 'circle',
+            source: {
+              type: 'geojson',
+              data: {
+                type: 'Feature',
+                geometry: {
+                  type: 'Point',
+                  coordinates: [coordinates.longitude, coordinates.latitude]
+                }
               }
-            }
-          },
-          paint: {
-            'circle-radius': {
-              'base': 1,
-              'stops': [[0, 0], [20, getRadiusInMeters(radius)]]
             },
-            'circle-color': 'blue',
-            'circle-opacity': 0.5
-          }
-        });
+            paint: {
+              'circle-radius': getRadiusInMeters(radius),
+              'circle-color': 'blue',
+              'circle-opacity': 0.5
+            }
+          });
+        }
+      });
 
+      map.current.on('load', () => {
         setIsMapLoading(false);
       });
     }
   }, [coordinates]);
 
   useEffect(() => {
-    if (map.current && map.current.getLayer('circle-radius')) {
-      map.current.setPaintProperty('circle-radius', 'circle-radius', {
-        'base': 1,
-        'stops': [[0, 0], [20, getRadiusInMeters(radius)]]
+    if (map.current && map.current.isStyleLoaded()) {
+      const newZoomLevel = 15.2 - (radius - 0.1) * 6;
+      map.current.easeTo({
+        zoom: newZoomLevel,
+        duration: 1000, // Duration of the animation in milliseconds
+        essential: true
       });
     }
   }, [radius]);
+  
 
   return (
     <div className="map-container">
