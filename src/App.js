@@ -5,7 +5,7 @@ import MapComponent from './mapComponent';
 const API_ENDPOINT = 'https://paddsg8yeh.execute-api.us-east-2.amazonaws.com/test/rentalPrices';
 
 function App() {
-  const [radius, setRadius] = useState('0.1');
+  const [radius, setRadius] = useState(0.1); // Initial radius value
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -67,28 +67,28 @@ function App() {
     }
   };
 
+  const handleIncrement = () => {
+    setRadius(prevRadius => Math.min(prevRadius + 0.1, 5)); // Increment, max 5
+  };
+
+  const handleDecrement = () => {
+    setRadius(prevRadius => Math.max(prevRadius - 0.1, 0.1)); // Decrement, min 0.1
+  };
+
   return (
     <div className="container">
       <h1 className="title">Can I Afford to Live Here?</h1>
-      <form className="form">
-        <label htmlFor="radius" className="form-label">
-          Enter Radius (in miles):
-        </label>
-        <input
-          type="number"
-          id="radius"
-          name="radius"
-          required
-          step="0.1"
-          placeholder="e.g., 1.5"
-          value={radius}
-          onChange={(e) => setRadius(e.target.value)}
-          className="form-input"
-        />
-        <button type="button" onClick={calculateRentalPrices} className="form-button">
-          Calculate
-        </button>
-      </form>
+      <p className="instructions">Enter a radius in miles to search active rental listings</p>
+      <div className="wrapper">
+        <div className="number-stepper-container">
+          <button id="decrement" onClick={handleDecrement}>-</button>
+          <input type="number" value={radius.toFixed(1)} readOnly />
+          <button id="increment" onClick={handleIncrement}>+</button>
+        </div>
+      </div>
+      <button type="button" onClick={calculateRentalPrices} className="form-button">
+        Show Average Rental Prices
+      </button>
       {loading ? (
         <div className="loading-spinner">Loading...</div>
       ) : (
@@ -107,7 +107,7 @@ function App() {
           </ul>
         </div>
       )}
-     <MapComponent coordinates={userCoordinates} radius={parseFloat(radius)} />
+      <MapComponent coordinates={userCoordinates} radius={parseFloat(radius)} />
     </div>
   );
 }
