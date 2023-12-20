@@ -21,7 +21,7 @@ const MapComponent = ({ coordinates, radius }) => {
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [coordinates.longitude, coordinates.latitude],
-        zoom: 13,
+        zoom: 15,
         scrollZoom: false,
         doubleClickZoom: false,
         touchZoomRotate: false,
