@@ -82,7 +82,10 @@ function App() {
       <div className="wrapper">
         <div className="number-stepper-container">
           <button id="decrement" onClick={handleDecrement}>-</button>
-          <input type="number" value={radius.toFixed(1)} readOnly />
+          <div className="input-with-suffix">
+            <input type="number" value={radius.toFixed(1)} readOnly />
+            <span className="suffix">miles</span>
+          </div>
           <button id="increment" onClick={handleIncrement}>+</button>
         </div>
       </div>
