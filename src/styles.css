@@ -45,7 +45,7 @@
   
   .results-list {
     list-style-type: none;
-    padding: 0;
+    padding: 10px;
   }
   
   .result-item {
@@ -63,12 +63,8 @@
   .studio-label {
     color: #2196f3;
   }
-
-  /* styles.css */
-
-/* ... (existing styles) ... */
-
-.radius-control {
+  
+  .radius-control {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
@@ -88,4 +84,10 @@
     font-size: 1.2em;
   }
   
+  .map-container {
+    height: 500px; /* Adjust height as needed */
+    width: 100%; /* Full width of the container */
+    margin-bottom: 10px;
+    position: relative; /* Ensures the map respects the document flow */
+  }
   

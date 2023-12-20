@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './styles.css';
+import MapComponent from './mapComponent';
 
-const API_ENDPOINT = 'https://paddsg8yeh.execute-api.us-east-2.amazonaws.com/test/rentalPrices'; // Replace with your actual API Gateway endpoint
+const API_ENDPOINT = 'https://paddsg8yeh.execute-api.us-east-2.amazonaws.com/test/rentalPrices';
 
 function App() {
   const [radius, setRadius] = useState('0.1');
   const [results, setResults] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [userCoordinates, setUserCoordinates] = useState({ latitude: null, longitude: null });
 
-  const getCurrentPosition = () => {
-    return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(resolve, reject);
-    });
-  };
+  useEffect(() => {
+    const getCurrentPosition = () => {
+      return new Promise((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+      });
+    };
+
+    const fetchCoordinates = async () => {
+      try {
+        const position = await getCurrentPosition();
+        setUserCoordinates({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        });
+      } catch (error) {
+        console.error('Error getting user location:', error);
+        setError('Unable to fetch user location.');
+      }
+    };
+
+    fetchCoordinates();
+  }, []);
 
   const calculateRentalPrices = async () => {
     if (isNaN(radius) || radius <= 0) {
@@ -27,19 +46,12 @@ function App() {
     setLoading(true);
 
     try {
-      const position = await getCurrentPosition();
-      const coordinates = {
-        latitude: position.coords.latitude,
-        longitude: position.coords.longitude,
-      };
-
-      const response = await fetch(`${API_ENDPOINT}/rentalPrices?latitude=${coordinates.latitude}&longitude=${coordinates.longitude}&radius=${radius}`, {
+      const response = await fetch(`${API_ENDPOINT}/rentalPrices?latitude=${userCoordinates.latitude}&longitude=${userCoordinates.longitude}&radius=${radius}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
       });
-      
 
       if (!response.ok) {
         throw new Error(`Failed to fetch rental prices: ${response.statusText}`);
@@ -78,7 +90,7 @@ function App() {
         </button>
       </form>
       {loading ? (
-        <div className="loading-message">Fetching prices...</div>
+        <div className="loading-spinner">Loading...</div>
       ) : (
         <div>
           {error && <div className="error-message">{error}</div>}
@@ -95,6 +107,7 @@ function App() {
           </ul>
         </div>
       )}
+     <MapComponent coordinates={userCoordinates} radius={parseFloat(radius)} />
     </div>
   );
 }
