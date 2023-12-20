@@ -55,6 +55,7 @@
   .results-list {
     list-style-type: none;
     padding: 0px;
+    justify-content: center;
   }
   
   .result-item {
@@ -64,6 +65,9 @@
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-size: 14px;
+    justify-content: center;
+    text-align: center;
+    color: white;
   }
   
   .result-item:hover {
@@ -72,7 +76,7 @@
   
   
   .map-container {
-    height: 500px; /* Adjust height as needed */
+    height: 400px; /* Adjust height as needed */
     width: 100%; /* Full width of the container */
     margin-bottom: 10px;
     position: relative; /* Ensures the map respects the document flow */
@@ -105,7 +109,7 @@
     position: relative;
     width: 100%;
     max-width: 400px;
-    margin: 30px auto; /* Center and add space around the wrapper */
+    margin: 20px auto; /* Center and add space around the wrapper */
   }
   
   .number-stepper-container {
@@ -168,7 +172,7 @@
   /* Main Container */
   .container {
     max-width: 600px;
-    margin: 20px auto; /* Center and add space around the main container */
+    margin: 5px auto; /* Center and add space around the main container */
     padding: 20px;
     background-color: #bcd5ee;
     border-radius: 0px;

@@ -104,7 +104,7 @@ function App() {
                   <span className="studio-label">Studio</span>
                 ) : (
                   `${item.bedrooms} bedroom`
-                )} rental price - ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                )} rental - ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
               </li>
             ))}
           </ul>
