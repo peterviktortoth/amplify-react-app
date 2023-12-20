@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import mapboxgl from 'mapbox-gl';
-import './styles.css'; // Make sure this contains the spinner styles
+import './styles.css'; // Include your styles
 
 mapboxgl.accessToken = 'pk.eyJ1IjoicGV0ZXJ2aWt0b3J0b3RoIiwiYSI6ImNscWN5bWM1ZzA3b3kyanBhMndyZW44eTMifQ.4le2l0XBKj7DKKYzu_LgyQ';
 
@@ -8,10 +8,10 @@ const MapComponent = ({ coordinates, radius }) => {
   const mapContainerRef = useRef(null);
   const map = useRef(null);
   const marker = useRef(null);
-  const [isMapLoading, setIsMapLoading] = useState(true); // State to track map loading
+  const [isMapLoading, setIsMapLoading] = useState(true);
 
   // Convert radius from miles to meters
-  const getRadiusInMeters = (miles) => miles * 1609.34; // 1 mile is approximately 1609.34 meters
+  const getRadiusInMeters = (miles) => miles * 1609.34;
 
   useEffect(() => {
     if (!coordinates || !coordinates.latitude || !coordinates.longitude) return;
@@ -21,7 +21,7 @@ const MapComponent = ({ coordinates, radius }) => {
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/streets-v11',
         center: [coordinates.longitude, coordinates.latitude],
-        zoom: 15,
+        zoom: 14.5,
         scrollZoom: false,
         doubleClickZoom: false,
         touchZoomRotate: false,
@@ -48,22 +48,27 @@ const MapComponent = ({ coordinates, radius }) => {
             }
           },
           paint: {
-            'circle-radius': getRadiusInMeters(radius),
+            'circle-radius': {
+              'base': 1,
+              'stops': [[0, 0], [20, getRadiusInMeters(radius)]]
+            },
             'circle-color': 'blue',
             'circle-opacity': 0.5
           }
         });
 
-        setIsMapLoading(false); // Hide the spinner when the map is loaded
+        setIsMapLoading(false);
       });
     }
-  }, [coordinates, radius]);
+  }, [coordinates]);
 
-  // Update the circle radius when the radius prop changes
   useEffect(() => {
-    if (!map.current || !map.current.isStyleLoaded() || !map.current.getLayer('circle-radius')) return;
-
-    map.current.setPaintProperty('circle-radius', 'circle-radius', getRadiusInMeters(radius));
+    if (map.current && map.current.getLayer('circle-radius')) {
+      map.current.setPaintProperty('circle-radius', 'circle-radius', {
+        'base': 1,
+        'stops': [[0, 0], [20, getRadiusInMeters(radius)]]
+      });
+    }
   }, [radius]);
 
   return (
