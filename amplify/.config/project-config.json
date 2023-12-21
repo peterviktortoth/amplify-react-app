@@ -2,13 +2,13 @@
   "providers": [
     "awscloudformation"
   ],
-  "projectName": "amplifyreactapp",
+  "projectName": "rentalsV3",
   "version": "3.1",
   "frontend": "javascript",
   "javascript": {
     "framework": "react",
     "config": {
-      "SourceDir": "src",
+      "SourceDir": "/Users/peter/Documents/GitHub/ptoth-rentals-v2/amplify-react-app/src",
       "DistributionDir": "build",
       "BuildCommand": "npm run-script build",
       "StartCommand": "npm run-script start"

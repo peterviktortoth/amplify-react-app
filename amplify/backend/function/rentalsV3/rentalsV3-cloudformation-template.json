@@ -47,12 +47,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "amplifyreactapp4ef3013a",
+            "rentalsV3",
             {
               "Fn::Join": [
                 "",
                 [
-                  "amplifyreactapp4ef3013a",
+                  "rentalsV3",
                   "-",
                   {
                     "Ref": "env"
@@ -89,12 +89,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "amplifyreactappLambdaRoleac06364b",
+            "rentalsv3LambdaRole4832fb85",
             {
               "Fn::Join": [
                 "",
                 [
-                  "amplifyreactappLambdaRoleac06364b",
+                  "rentalsv3LambdaRole4832fb85",
                   "-",
                   {
                     "Ref": "env"

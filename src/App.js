@@ -6,10 +6,12 @@ const API_ENDPOINT = 'https://paddsg8yeh.execute-api.us-east-2.amazonaws.com/tes
 
 function App() {
   const [radius, setRadius] = useState(0.1); // Initial radius value
-  const [results, setResults] = useState([]);
+  const [averagePrices, setAveragePrices] = useState([]); // State for average prices
+  const [listings, setListings] = useState([]); // State for individual listings
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [userCoordinates, setUserCoordinates] = useState({ latitude: null, longitude: null });
+  const [expandedSections, setExpandedSections] = useState({}); // State for expandable sections
 
   useEffect(() => {
     const getCurrentPosition = () => {
@@ -37,7 +39,8 @@ function App() {
   const calculateRentalPrices = async () => {
     if (isNaN(radius) || radius <= 0) {
       setError('Please enter a valid positive number for the radius.');
-      setResults([]);
+      setAveragePrices([]);
+      setListings([]);
       return;
     } else {
       setError('');
@@ -46,7 +49,7 @@ function App() {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_ENDPOINT}/rentalPrices?latitude=${userCoordinates.latitude}&longitude=${userCoordinates.longitude}&radius=${radius}`, {
+      const response = await fetch(`${API_ENDPOINT}?latitude=${userCoordinates.latitude}&longitude=${userCoordinates.longitude}&radius=${radius}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -58,13 +61,21 @@ function App() {
       }
 
       const data = await response.json();
-      setResults(data);
+      setAveragePrices(data.averagePrices);
+      setListings(data.listings);
     } catch (error) {
       console.error(`Error: ${error}`);
       setError(error.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleSection = (bedrooms) => {
+    setExpandedSections(prevState => ({
+      ...prevState,
+      [bedrooms]: !prevState[bedrooms]
+    }));
   };
 
   const handleIncrement = () => {
@@ -88,28 +99,37 @@ function App() {
           </div>
           <button id="increment" onClick={handleIncrement}>+</button>
         </div>
+        <button type="button" onClick={calculateRentalPrices} className="form-button">
+          Show Average Rental Prices
+        </button>
       </div>
-      <button type="button" onClick={calculateRentalPrices} className="form-button">
-        Show Average Rental Prices
-      </button>
+
       {loading ? (
         <div className="loading-spinner">Loading...</div>
       ) : (
         <div>
           {error && <div className="error-message">{error}</div>}
           <ul className="results-list">
-            {results.map((item, index) => (
+            {averagePrices.map((item, index) => (
               <li key={index} className="result-item">
-                Average {item.bedrooms === 'Unknown' ? (
-                  <span className="studio-label">Studio</span>
-                ) : (
-                  `${item.bedrooms} bedroom`
-                )} rental - ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                <div className="category-title" onClick={() => toggleSection(item.bedrooms)}>
+                  Average {item.bedrooms === 'Unknown' ? 'Studio' : `${item.bedrooms} bedroom`} rental - ${item.average_price.toLocaleString('en-US', { maximumFractionDigits: 2 })}
+                </div>
+                {expandedSections[item.bedrooms] && (
+                  <ul className="listings-list">
+                    {listings.filter(listing => listing.bedrooms === item.bedrooms).map((listing, listingIndex) => (
+                      <li key={listingIndex} className="listing-item">
+                        {listing.propertyType} - {listing.formattedAddress} - ${listing.price.toLocaleString('en-US')}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </li>
             ))}
           </ul>
         </div>
       )}
+
       <MapComponent coordinates={userCoordinates} radius={parseFloat(radius)} />
     </div>
   );

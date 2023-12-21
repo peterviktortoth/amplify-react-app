@@ -1,6 +1,6 @@
 {
   "api": {
-    "apibecd6461": {
+    "rentalsV3": {
       "dependsOn": [
         {
           "attributes": [
@@ -8,7 +8,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "amplifyreactapp4ef3013a"
+          "resourceName": "rentalsV3"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -16,32 +16,26 @@
     }
   },
   "function": {
-    "amplifyreactapp4ef3013a": {
+    "rentalsV3": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
-  "hosting": {
-    "S3AndCloudFront": {
-      "providerPlugin": "awscloudformation",
-      "service": "S3AndCloudFront"
-    }
-  },
   "parameters": {
-    "AMPLIFY_function_amplifyreactapp4ef3013a_deploymentBucketName": {
+    "AMPLIFY_function_rentalsV3_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "amplifyreactapp4ef3013a"
+          "resourceName": "rentalsV3"
         }
       ]
     },
-    "AMPLIFY_function_amplifyreactapp4ef3013a_s3Key": {
+    "AMPLIFY_function_rentalsV3_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "amplifyreactapp4ef3013a"
+          "resourceName": "rentalsV3"
         }
       ]
     }
